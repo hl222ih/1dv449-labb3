@@ -1,4 +1,5 @@
 <?php
+session_start();
 /**
  * Eftersom applikationen saknar inloggning så är detta bara ett sätt att något försvåra direktåtkomst till resurser
  */

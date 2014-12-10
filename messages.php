@@ -1,5 +1,10 @@
 <?php
+session_start();
+require_once("security.php");
 
+if (!checkToken()) {
+    header("HTTP/1.1 403 Forbidden (direct access not allowed)");
+}
 
 $context = stream_context_create(array(
     'http' => array(
@@ -13,6 +18,6 @@ $trafficJson = file_get_contents('http://api.sr.se/api/v2/traffic/messages/?form
 if ($trafficJson) {
     echo $trafficJson;
 } else {
-    //header("HTTP/1.0 408 Request Timeout");
+    //header("HTTP/1.1 408 Request Timeout");
     echo json_encode(array('error' => 'Misslyckades att hämta data.'), JSON_UNESCAPED_UNICODE);
 }

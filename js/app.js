@@ -8,7 +8,7 @@ $(document).ready(function() {
     }).done(function(data) {
         var parsedData = JSON.parse(data);
         if (parsedData.error) {
-            $("#content").append('<p>' + parsedData.error  + 'error</p>');
+            $("#content").append('<p>' + parsedData.error  + '</p>');
         } else {
             $("#content").append('<p>' + data + '</p>'); //tillfällig utskrivning av rådata
         }
