@@ -28,8 +28,7 @@
         <button type="radio" class="btn btn-default choice" data-choice="2">Planerad störning</button>
         <button type="radio" class="btn btn-default choice" data-choice="3">Övrigt</button>
     </div>
-    <ul id="content">
-    </ul>
+    <div id="content" class="list-group"></div>
     <div id="map"></div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>

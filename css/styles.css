@@ -11,6 +11,7 @@ h1 {
     position: absolute;
     width: 40%;
     left: 1%;
+    padding-top: 10px;
 }
 #map {
     position: absolute;

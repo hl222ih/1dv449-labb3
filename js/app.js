@@ -45,17 +45,20 @@ HL = {
             });
         }
         for (i; i < HL.FilteredMessages.length; i++) {
-            $contentNode.append('<li>'
-                + '<div class="panel panel-default">'
-                    + '<div class="panel-body">'
-                        + HL.FilteredMessages[i]["subcategory"]
-                        + HL.FilteredMessages[i]["subcategory"]
-                        + HL.FilteredMessages[i]["subcategory"]
-                        + HL.FilteredMessages[i]["subcategory"]
-                        + HL.FilteredMessages[i]["subcategory"]
-                + '</div>'
-                + '</div>'
-            + '</li>');
+            $contentNode.append(''
+                + '<a href="#" class="list-group-item">'
+                    + '<h4 class="list-group-item-heading">'
+                        + HL.FilteredMessages[i]["subcategory"] + ' - '
+                        + HL.FilteredMessages[i]["title"]
+                    + '</h4>'
+                    + '<p class="list-group-item-text">'
+                        + HL.FilteredMessages[i]["description"]
+                    + '</p>'
+                    + '<p class="list-group-item-text">'
+                        + new Date(parseInt(HL.FilteredMessages[i]["createddate"].substr(6))).toLocaleString()
+                    + '</p>'
+                + '</a>'
+            );
         }
     },
     RenderMessage: function() {
