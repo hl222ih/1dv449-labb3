@@ -4,7 +4,7 @@ HL = {
     GoogleMap: {},
     GoogleMapInit: function() {
         HL.GoogleMap = new google.maps.Map($('#map')[0], {
-           zoom: 6,
+           zoom: 5,
            center: {lat: 60, lng: 14},
            mapTypeId: google.maps.MapTypeId.ROADMAP,
         });
