@@ -19,11 +19,10 @@ if (file_exists('data/timeOfLastTrafficRequest.txt')){
     file_put_contents('data/timeOfLastTrafficRequest.txt', "");
 }
 //returnera cachad data om det var mindre än 10 minuter sedan ett anrop gjordes till Sveriges Radios server.
-if ($timeOfLastTrafficRequest > strtotime('- 10 minutes')) {
+if ($timeOfLastTrafficRequest > strtotime('- 0 minutes')) {
     $trafficJson = file_get_contents('data/lastTrafficRequest.txt');
-    file_put_contents('data/fromTextFile.txt', strtotime('- 10 minutes'));
 } else {
-    $trafficJson = file_get_contents('http://api.sr.se/api/v2/traffic/messages/?format=json&pagination=false&sort=createddate&size=100', false, $context);
+    $trafficJson = file_get_contents('http://api.sr.se/api/v2/traffic/messages/?format=json&pagination=false&size=100', false, $context);
     file_put_contents('data/lastTrafficRequest.txt', $trafficJson);
     file_put_contents('data/timeOfLastTrafficRequest.txt', time());
 }

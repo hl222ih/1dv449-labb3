@@ -15,12 +15,17 @@ HL = {
             headers: {
                 'X-Auth-Token' : $("meta[name='token']").attr("content")
             }
-        }).done(function(data, textStatus, jqXHR) {
+        }).done(function(data) {
             var parsedData = JSON.parse(data);
             if (parsedData.error) {
                 $("#content").append('<p>' + parsedData.error  + '</p>');
             } else {
-                HL.Messages = parsedData['messages'];
+                HL.Messages = parsedData['messages'].sort(function (a, b) {
+                    var date1 = parseInt(a["createddate"].substr(6));
+                    var date2 = parseInt(b["createddate"].substr(6));
+                    return (date1 > date2) ? -1 : (date1 < date2) ? 1 : 0;
+                });
+//                HL.Messages = parsedData['messages'];
                 $("#content").append('<p>' + data + '</p>'); //tillfällig utskrivning av rådata
                 HL.ProcessMessages();
             }
@@ -45,24 +50,24 @@ HL = {
             });
         }
         for (i; i < HL.FilteredMessages.length; i++) {
-            $contentNode.append(''
-                + '<a href="#" class="list-group-item">'
-                    + '<h4 class="list-group-item-heading">'
-                        + HL.FilteredMessages[i]["subcategory"] + ' - '
-                        + HL.FilteredMessages[i]["title"]
-                    + '</h4>'
-                    + '<p class="list-group-item-text">'
-                        + HL.FilteredMessages[i]["description"]
-                    + '</p>'
-                    + '<p class="list-group-item-text">'
-                        + new Date(parseInt(HL.FilteredMessages[i]["createddate"].substr(6))).toLocaleString()
-                    + '</p>'
-                + '</a>'
-            );
+            HL.RenderMessage($contentNode, HL.FilteredMessages[i]);
         }
     },
-    RenderMessage: function() {
-
+    RenderMessage: function($node, $message) {
+        $node.append(''
+            + '<a href="#" class="list-group-item">'
+                + '<h4 class="list-group-item-heading">'
+                    + $message["subcategory"] + ' - '
+                    + $message["title"]
+                + '</h4>'
+                + '<p class="list-group-item-text">'
+                    + $message["description"]
+                + '</p>'
+                + '<p class="list-group-item-text">'
+                    + new Date(parseInt($message["createddate"].substr(6))).toLocaleString()
+                + '</p>'
+            + '</a>'
+        );
     },
     AddMarker: function() {
 
