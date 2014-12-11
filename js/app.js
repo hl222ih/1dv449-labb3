@@ -51,12 +51,12 @@ HL = {
         var message = {};
         for (i; i < HL.FilteredMessages.length; i++) {
             message = HL.FilteredMessages[i];
-            HL.RenderMessage(contentNode, message);
-            HL.AddMarker(message['latitude'], message['longitude'], message);
+            var marker = HL.AddMarker(message['latitude'], message['longitude'], message);
+            HL.RenderMessage(contentNode, message, marker);
         }
     },
-    RenderMessage: function(node, message) {
-        node.append(''
+    RenderMessage: function(containerNode, message, marker) {
+        var messageNode = $(''
             + '<a href="#" class="list-group-item">'
                 + '<h4 class="list-group-item-heading">'
                     + message["subcategory"] + ' - '
@@ -68,8 +68,26 @@ HL = {
                 + '<p class="list-group-item-text">'
                     + new Date(parseInt(message["createddate"].substr(6))).toLocaleString()
                 + '</p>'
-            + '</a>'
-        );
+            + '</a>');
+        $(messageNode).click(function() {
+            HL.CloseInfoWindow();
+            $('.list-group-item.active').removeClass('active');
+            $(messageNode).addClass('active');
+            HL.GoogleMap.setCenter(marker.getPosition());
+            clearTimeout(marker.timer);
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function() {
+                marker.setAnimation(null);
+            }, 2250);
+        });
+        $(messageNode).mouseover(function() {
+            if (marker.getAnimation()) return;
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            marker.timer = setTimeout(function() {
+                marker.setAnimation(null);
+            }, 750);
+        });
+        containerNode.append(messageNode);
     },
     Markers: [],
     ClearMarkers: function() {
@@ -86,9 +104,7 @@ HL = {
         });
         HL.Markers.push(marker);
         google.maps.event.addListener(marker, 'click', function() {
-            if (!$.isEmptyObject(HL.InfoWindow)) {
-                HL.InfoWindow.close();
-            }
+            HL.CloseInfoWindow();
             HL.InfoWindow = new google.maps.InfoWindow({
                 content: '<div><h4>' + message['subcategory'] + ' - ' + message['title'] + '</h4></div>'
                     +'<div>' + message['description'] + '</div>'
@@ -96,8 +112,14 @@ HL = {
             });
             HL.InfoWindow.open(HL.GoogleMap, marker);
         });
+        return marker;
     },
-    InfoWindow: {}
+    InfoWindow: {},
+    CloseInfoWindow: function() {
+        if (!$.isEmptyObject(HL.InfoWindow)) {
+            HL.InfoWindow.close();
+        }
+    }
 };
 
 $(document).ready(function() {

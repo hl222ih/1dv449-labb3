@@ -11,13 +11,16 @@ h1 {
     position: absolute;
     width: 40%;
     left: 1%;
-    padding-top: 10px;
+    margin-top: 10px;
+    height: 80%;
+    overflow-y: scroll;
 }
 #map {
     position: absolute;
     height: 80%;
     width: 50%;
     right: 5%;
+    border-radius: 6px;
 }
 
 ul,li {
