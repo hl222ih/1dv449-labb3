@@ -49,7 +49,11 @@ HL = {
                 + '<div class="panel panel-default">'
                     + '<div class="panel-body">'
                         + HL.FilteredMessages[i]["subcategory"]
-                    + '</div>'
+                        + HL.FilteredMessages[i]["subcategory"]
+                        + HL.FilteredMessages[i]["subcategory"]
+                        + HL.FilteredMessages[i]["subcategory"]
+                        + HL.FilteredMessages[i]["subcategory"]
+                + '</div>'
                 + '</div>'
             + '</li>');
         }

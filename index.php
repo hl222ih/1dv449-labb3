@@ -1,6 +1,7 @@
 <?php
     session_start();
 	require_once("security.php");
+    date_default_timezone_set('Europe/Stockholm');
 /*    header("Content-Security-Policy: script-src 'self' http://ajax.googleapis.com http://maxcdn.bootstrapcdn.com https://maps.googleapis.com https://maps.gstatic.com");*/
 ?>
 <!DOCTYPE html>
