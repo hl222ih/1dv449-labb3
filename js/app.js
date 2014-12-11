@@ -6,7 +6,7 @@ HL = {
         HL.GoogleMap = new google.maps.Map($('#map')[0], {
            zoom: 6,
            center: {lat: 60, lng: 14},
-           mapTypeId: google.maps.MapTypeId.ROADMAP
+           mapTypeId: google.maps.MapTypeId.ROADMAP,
         });
     },
     GetMessages: function() {
@@ -52,7 +52,7 @@ HL = {
         for (i; i < HL.FilteredMessages.length; i++) {
             message = HL.FilteredMessages[i];
             HL.RenderMessage(contentNode, message);
-            HL.AddMarker(message['latitude'], message['longitude']);
+            HL.AddMarker(message['latitude'], message['longitude'], message);
         }
     },
     RenderMessage: function(node, message) {
@@ -79,13 +79,25 @@ HL = {
         }
         HL.Markers = [];
     },
-    AddMarker: function(lat, lng) {
+    AddMarker: function(lat, lng, message) {
         var marker = new google.maps.Marker({
             position: {lat: lat, lng: lng},
             map: HL.GoogleMap
         });
         HL.Markers.push(marker);
-    }
+        google.maps.event.addListener(marker, 'click', function() {
+            if (!$.isEmptyObject(HL.InfoWindow)) {
+                HL.InfoWindow.close();
+            }
+            HL.InfoWindow = new google.maps.InfoWindow({
+                content: '<div><h4>' + message['subcategory'] + ' - ' + message['title'] + '</h4></div>'
+                    +'<div>' + message['description'] + '</div>'
+                +'<div>' + new Date(parseInt(message["createddate"].substr(6))).toLocaleString() + '</div>'
+            });
+            HL.InfoWindow.open(HL.GoogleMap, marker);
+        });
+    },
+    InfoWindow: {}
 };
 
 $(document).ready(function() {
