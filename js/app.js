@@ -1,8 +1,9 @@
 var HL = HL || {};
 
 HL = {
-    GoogleMaps: function() {
-        var map = new google.maps.Map($('#map')[0], {
+    GoogleMap: {},
+    GoogleMapInit: function() {
+        HL.GoogleMap = new google.maps.Map($('#map')[0], {
            zoom: 6,
            center: {lat: 60, lng: 14},
            mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -25,8 +26,6 @@ HL = {
                     var date2 = parseInt(b["createddate"].substr(6));
                     return (date1 > date2) ? -1 : (date1 < date2) ? 1 : 0;
                 });
-//                HL.Messages = parsedData['messages'];
-                $("#content").append('<p>' + data + '</p>'); //tillfällig utskrivning av rådata
                 HL.ProcessMessages();
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -37,9 +36,8 @@ HL = {
     FilteredMessages: [],
     ProcessMessages: function(category) {
         var i = 0;
-        var $contentNode = $("#content");
-        $contentNode.empty();
-//        $contentNode.append('<p>' + data + '</p>');
+        var contentNode = $("#content");
+        contentNode.empty();
 
         if (category === undefined || category === "") {
             HL.FilteredMessages = $.extend(true, [], HL.Messages);
@@ -49,28 +47,44 @@ HL = {
                 return isSame;
             });
         }
+        HL.ClearMarkers();
+        var message = {};
         for (i; i < HL.FilteredMessages.length; i++) {
-            HL.RenderMessage($contentNode, HL.FilteredMessages[i]);
+            message = HL.FilteredMessages[i];
+            HL.RenderMessage(contentNode, message);
+            HL.AddMarker(message['latitude'], message['longitude']);
         }
     },
-    RenderMessage: function($node, $message) {
-        $node.append(''
+    RenderMessage: function(node, message) {
+        node.append(''
             + '<a href="#" class="list-group-item">'
                 + '<h4 class="list-group-item-heading">'
-                    + $message["subcategory"] + ' - '
-                    + $message["title"]
+                    + message["subcategory"] + ' - '
+                    + message["title"]
                 + '</h4>'
                 + '<p class="list-group-item-text">'
-                    + $message["description"]
+                    + message["description"]
                 + '</p>'
                 + '<p class="list-group-item-text">'
-                    + new Date(parseInt($message["createddate"].substr(6))).toLocaleString()
+                    + new Date(parseInt(message["createddate"].substr(6))).toLocaleString()
                 + '</p>'
             + '</a>'
         );
     },
-    AddMarker: function() {
-
+    Markers: [],
+    ClearMarkers: function() {
+        var i = 0;
+        for(i; i < HL.Markers.length; i++) {
+            HL.Markers[i].setMap(null);
+        }
+        HL.Markers = [];
+    },
+    AddMarker: function(lat, lng) {
+        var marker = new google.maps.Marker({
+            position: {lat: lat, lng: lng},
+            map: HL.GoogleMap
+        });
+        HL.Markers.push(marker);
     }
 };
 
@@ -79,5 +93,5 @@ $(document).ready(function() {
     $('.choice').click(function() {
         HL.ProcessMessages($(this).attr("data-choice"));
     });
-    HL.GoogleMaps();
+    HL.GoogleMapInit();
 });
