@@ -14,7 +14,7 @@ $context = stream_context_create(array(
     )
 ));
 
-$trafficJson = file_get_contents('http://api.sr.se/api/v2/traffic/messages/?format=json', false, $context);
+$trafficJson = file_get_contents('http://api.sr.se/api/v2/traffic/messages/?format=json&pagination=false&size=100', false, $context);
 if ($trafficJson) {
     echo $trafficJson;
 } else {

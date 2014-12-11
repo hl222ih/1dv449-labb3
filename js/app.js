@@ -22,7 +22,7 @@ HL = {
             } else {
                 HL.Messages = parsedData['messages'];
                 $("#content").append('<p>' + data + '</p>'); //tillfällig utskrivning av rådata
-                HL.ShowMessages();
+                HL.ProcessMessages();
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
             $("#content").append('<p>' + jqXHR.status + ' ' + textStatus + '</p>');
@@ -30,23 +30,28 @@ HL = {
     },
     Messages: [],
     FilteredMessages: [],
-    ShowMessages: function(subCategory) {
-        if (subCategory) {
-            HL.FilteredMessages = this.Messages.filter(function(message) { return message['subcategory'] === subCategory });
-        } else {
-            HL.FilteredMessages = $.extend(true, [], HL.Messages);
-        }
-        HL.ProcessMessages();
-        alert(JSON.stringify(HL.FilteredMessages));
-    },
-    ProcessMessages: function() {
+    ProcessMessages: function(category) {
         var i = 0;
         var $contentNode = $("#content");
         $contentNode.empty();
 //        $contentNode.append('<p>' + data + '</p>');
 
+        if (category === undefined || category === "") {
+            HL.FilteredMessages = $.extend(true, [], HL.Messages);
+        } else {
+            HL.FilteredMessages = HL.Messages.filter(function(message) {
+                var isSame = message['category'] == category;
+                return isSame;
+            });
+        }
         for (i; i < HL.FilteredMessages.length; i++) {
-            $contentNode.append('<li>' + HL.FilteredMessages[i]['subcategory'] + '</li>');
+            $contentNode.append('<li>'
+                + '<div class="panel panel-default">'
+                    + '<div class="panel-body">'
+                        + HL.FilteredMessages[i]["subcategory"]
+                    + '</div>'
+                + '</div>'
+            + '</li>');
         }
     },
     RenderMessage: function() {
@@ -59,5 +64,8 @@ HL = {
 
 $(document).ready(function() {
     HL.GetMessages();
+    $('.choice').click(function() {
+        HL.ProcessMessages($(this).attr("data-choice"));
+    });
     HL.GoogleMaps();
 });

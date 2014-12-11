@@ -1,5 +1,27 @@
+h1 {
+    display: block;
+    text-align: center;
+}
+
+#category {
+    left: 1%;
+}
+
+#content {
+    position: absolute;
+    width: 40%;
+    left: 1%;
+}
 #map {
     position: absolute;
     height: 80%;
-    width: 80%;
+    width: 50%;
+    right: 5%;
+}
+
+ul,li {
+    list-style-type: none;
+    padding: 0;
+    padding-top: 4px;
+    margin: 0;
 }
