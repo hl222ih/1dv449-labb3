@@ -18,3 +18,12 @@ function checkToken() {
     }
     return $isAuthenticated;
 }
+
+function getGoogleMapsApiKey() {
+    try {
+        $key = file_get_contents('data/google-maps-api-key.txt');
+    } catch (\Exception $ex) {
+        $key = "";
+    }
+    return $key;
+}
